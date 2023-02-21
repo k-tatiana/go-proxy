@@ -4,12 +4,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/tin-proxy/internal/functions"
-	"github.com/tin-proxy/internal/handlers"
+	"github.com/tin-proxy/second"
 )
 
 func main() {
 	// start server
-	http.HandleFunc("/", handlers.LoadBalancer)
-	log.Fatal(http.ListenAndServe(":"+functions.PORT, nil))
+	proxy := second.ReverseProxy()
+	if err := http.ListenAndServe("127.0.0.1:9999", proxy); err != nil {
+		log.Fatal("ListenAndServe:", err)
+	}
 }
